@@ -1,0 +1,67 @@
+當你在開發某一功能時，突然被PM打斷，要求你現在要先去修正一個急單，這時候你可以有兩個選擇:
+
+直接下commit，然後開始改急單
+使用 git stash，一樣開始改急單
+不管 commit 跟 git stash 都是不錯的選擇，不過還是有一些不同: 使用 commit 的話，會有紀錄，git stash 不會，如果今天你剛好開發到一段落，那下個 commit 可能無傷大雅，不過如果開發到一半要下 commit ，說實話筆者個人是會覺得不恰當
+
+所以今天要來簡單說明一下 git stash 的用法
+
+如果平常已經有在使用 git stash 的讀者，相信大部分人使用常用的不外乎就是 git stash 跟 git stash pop，那今天會介紹這兩個以外的語法:
+
+git stash list
+git stash show
+git stash apply
+git stash pop
+git stash clear
+git stash drop
+git stash
+這個語法會將你還沒有下 commit 的程式碼，儲存到你電腦 refs/stash 這個位置，等待你需要它的時候再把它拿出來使用
+
+git stash list
+這個語法可以用來看你的 stash 紀錄
+
+以上這張圖代表我們有一個編號 0 的 stash 紀錄，當今天下的 stash 量越大，這邊顯示的資料也會越多，如果想要跳出這個視窗的話要輸入 wq
+
+不過我今天不只想看紀錄誒，我想看紀錄裡面的內容
+
+git stash show
+這個語法，可以看到最新一次 stash的資料
+我們可以看到有一個 index.js 的資料夾有兩處變更，等等…不對啊，我要看得是資料夾裡面的變更啊
+
+git stash show -u
+這個語法，就可以看到最新一次 stash的完整資料了
+原來我是更改 index.js 裡面的 styles-components 括號啊
+不過都是看最新一次 stash紀錄誒，我想看其他的
+
+git stash show 編號 -u
+這裡的編號指的是，我們前面 git stash list 所看到的編號
+所以如果我今天想看編號 0 的詳細記錄，語法會是 git stash show 0 -u
+
+git stash apply vs git stash pop
+以上這兩個語法，都可以讓你從 stash list 裡面取出最新一次 stash的資料，不過兩者有一個很大的不同，就是資料拿出來以後，是否會刪除儲存記錄
+
+結論: git stash apply 不會刪除紀錄，git stash pop 會刪除紀錄
+
+取出指定資料
+今天要如果只下: git stash apply 或是 git stash pop，都只會去抓取最新一次 stash的資料，那如果要抓取特定資料呢？一樣在語法後面加上 編號 即可
+
+例如: git stash apply 0 或是 git stash pop 0
+
+刪除 stash 資料
+今天如果要刪除stash資料分成兩種:
+
+全部刪除，git stash list會清空
+刪除指定 stash 資料
+全部刪除
+語法是 git stash clear
+
+不過要很小心，因為如果刪除，基本上不太可能找回來
+
+刪除指定stash資料
+聰明如你，應該有猜到語法是 git stash clear 編號
+不過很遺憾不是這樣，如果這樣下的話你會得到一個錯誤訊息
+
+git stash clear with parameters is unimplemented
+
+上面錯誤訊息簡單來說就是 git stash clear 不接收參數，那怎麼辦？
+其實要刪除指定 stash 的語法是 git stash drop 編號，是不是看到被刪除了呢？
